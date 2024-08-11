@@ -63,10 +63,10 @@ class BookController {
   static async listBooksByPublisher (req, res) {
     const publisher_query = req.query.publisher;
     try {
-      const booksByPublisher = await livro.find({ publisher: publisher_query });
+      const booksByPublisher = await book.find({ publisher: publisher_query });
       res.status(200).json(booksByPublisher);
     } catch (erro) {
-      res.status(500).json({ message: `${erro.message} - falha na busca` });
+      res.status(400).json({ message: err.message });
     }
   }
 
