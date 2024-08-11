@@ -4,16 +4,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug via npm run dev",
-      "runtimeExecutable": "npm",
+      "name": "Launch with Nodemon",
+      "runtimeExecutable": "nodemon",
       "runtimeArgs": [
-        "run",
-        "dev"
+        "--inspect"
       ],
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "console": "integratedTerminal"
+      "program": "${workspaceFolder}/server.js",
+      "restart": true,
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "outFiles": ["${workspaceFolder}/**/*.js"]
     }
   ]
 }

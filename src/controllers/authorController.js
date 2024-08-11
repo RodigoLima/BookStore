@@ -1,26 +1,33 @@
-import {author} from "../models/author.js";
+import NotFound from "../erros/NotFound.js";
+import { author } from "../models/index.js";
 
 class AuthorController {
-  static async listAuthors(req, res) {
+  static async listAuthors(req, res, next) {
     try {
       const listAuthors = await author.find({});
       res.status(200).json(listAuthors);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      next(err);
     }
   }
 
-  static async listAuthorById(req, res) {
+  static listAuthorById = async (req, res, next) => {
     try {
       const id = req.params.id;
       const findAuthor = await author.findById(id);
-      res.status(200).json(findAuthor);
+      if (findAuthor != null) {
+        res.status(200).json(findAuthor);
+      }
+      else{
+        next(new NotFound("Author not found"));  
+      }
     } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  }
+        next(err);
 
-  static async updateAuthorById(req, res) {
+    }
+  };
+
+  static async updateAuthorById(req, res,next) {
     try {
       const id = req.params.id;
       await author.findByIdAndUpdate(id, req.body);
@@ -28,11 +35,11 @@ class AuthorController {
         menssage: "Author has been updated with successfully.",
       });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      next(err);
     }
   }
 
-  static async deleteAuthorById(req, res) {
+  static async deleteAuthorById(req, res,next) {
     try {
       const id = req.params.id;
       await author.findByIdAndDelete(id);
@@ -40,11 +47,11 @@ class AuthorController {
         menssage: "Author has been deleted with successfully.",
       });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      next(err);
     }
   }
 
-  static async registerAuthor(req, res) {
+  static async registerAuthor(req, res,next) {
     try {
       const newAuthor = await author.create(req.body);
       res.status(201).json({
@@ -52,7 +59,7 @@ class AuthorController {
         author: newAuthor,
       });
     } catch (err) {
-      res.status(400).json({ message: err.message });
+      next(err);
     }
   }
 }
